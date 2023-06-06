@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * Hello world!
  */
 public class App {
-    public static void q1() {
+    public static void q1_setsBigDecimal() {
         HashSet<BigDecimal> set = new HashSet<BigDecimal>();
         TreeSet<BigDecimal> treeSet = new TreeSet<BigDecimal>();
 
@@ -25,7 +25,7 @@ public class App {
         System.out.println(treeSet.size());
     }
 
-    public static void q2() {
+    public static void q2_sortByStrLen() {
         List<String> list = new ArrayList<String>(Arrays.asList("qwerty", "dfasdfa", "dsa", "f", "asdfsdfa", "retwer"));
         List<String> list2 = list.stream()
                 .sorted(new Comparator<String>() {
@@ -39,14 +39,94 @@ public class App {
         System.out.println(list2);
     }
 
+    public static void q3_sortByStrAlfReverse() {
+        List<String> list = Arrays.asList("qwerty", "dfasdfa", "dsa", "f", "asdfsdfa", "retwer");
+        List<String> list2 = list.stream()
+                .sorted(Comparator.reverseOrder())
+                .collect(ArrayList<String>::new,
+                        (listNew, item) -> listNew.add(item + 1),
+                        (listNew, listAdd) -> listNew.addAll(listAdd)
+                );
+        System.out.println(list2);
+    }
+
+    public static void q4_getMaxNum() {
+        int[] nums = new int[]{12, 3, 54, 66, 3, 34};
+        int max = 0;
+        for (int item : nums) {
+            if (item > max) {
+                max = item;
+            }
+        }
+        System.out.println(max);
+    }
+
+    public static void q4_getMaxNumByStream() {
+        int[] nums = new int[]{12, 3, 54, 66, 3, 34};
+        int max = Arrays.stream(nums).max().getAsInt();
+        System.out.println(max);
+    }
+
+    public static void q5_getMinNum() {
+        int[] nums = new int[]{12, 3, 54, 66, 3, 34};
+        int min = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < min) {
+                min = nums[i];
+            }
+        }
+        System.out.println(min);
+    }
+
+    public static void q5_getMinNumByStream() {
+        int[] nums = new int[]{12, 3, 54, 66, 3, 34};
+        int min = Arrays.stream(nums).min().getAsInt();
+        System.out.println(min);
+    }
+
+    public static void q6_arrayListVsHashSet() {
+        // List
+        List<Integer> integerList = Arrays.asList(null, 12, 3, 54, 66, 3, 34, null);
+        System.out.println("list: " + integerList);
+        // List access by index
+        System.out.println("List access by index 1:" + integerList.get(1));
+        // Saved sorted list
+        System.out.print("Saved ordered list: ");
+        for (Integer item : integerList) {
+            System.out.print(item + ", ");
+        }
+
+        System.out.println("\n=============");
+
+        // HashSet
+        HashSet<Integer> integerHashSet = new HashSet<>(integerList);
+        // Not saved order HashSet without duplicates
+        System.out.print("Not saved order HashSet without duplicates: ");
+        for (Integer item : integerHashSet) {
+            System.out.print(item + ", ");
+        }
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Hello World!");
-        System.out.println("q1:");
-        q1();
-        System.out.println("ExceptionsSample:");
+        System.out.println("_______q1_setsBigDecimal:");
+        q1_setsBigDecimal();
+        System.out.println("_______ExceptionsSample:");
         ExceptionsSample exceptionsSample = new ExceptionsSample();
         System.out.println(exceptionsSample.calc(2, 2));
-        System.out.println("q2:");
-        q2();
+        System.out.println("_______q2_sortByStrLen:");
+        q2_sortByStrLen();
+        System.out.println("_______q3_sortByStrAlfReverse:");
+        q3_sortByStrAlfReverse();
+        System.out.println("_______q4_getMaxNum:");
+        q4_getMaxNum();
+        System.out.println("_______q4_getMaxNumByStream:");
+        q4_getMaxNumByStream();
+        System.out.println("_______q5_getMinNum:");
+        q5_getMinNum();
+        System.out.println("_______q5_getMinNumByStream:");
+        q5_getMinNumByStream();
+        System.out.println("_______q6_arrayListVsHashSet:");
+        q6_arrayListVsHashSet();
     }
 }
