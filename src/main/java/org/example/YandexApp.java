@@ -247,18 +247,19 @@ public class YandexApp {
      */
     public static HashMap<String, HashSet<String>> task6_getStringGroups(String[] arr) {
         HashMap<String, HashSet<String>> result = new HashMap<>();
-        String elSorted = "";
+        String elSorted;
         for (String el : arr) {
             elSorted = el.chars()
                     .sorted()
                     .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                     .toString();
-            HashSet<String> hashSet = result.get(elSorted);
-            if (hashSet == null) {
-                hashSet = new HashSet<>();
-            }
+//            HashSet<String> hashSet = result.get(elSorted);
+//            if (hashSet == null) {
+//                hashSet = new HashSet<>();
+//                result.put(elSorted, hashSet);
+//            }
+            HashSet<String> hashSet = result.computeIfAbsent(elSorted, k -> new HashSet<>());
             hashSet.add(el);
-            result.put(elSorted, hashSet);
         }
         return result;
     }
