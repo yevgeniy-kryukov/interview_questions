@@ -264,6 +264,46 @@ public class YandexApp {
         return result;
     }
 
+    /**
+     * Слияние отрезков:
+     * Вход: [1, 3] [100, 200] [2, 4]
+     * Выход: [1, 4] [100, 200]
+     */
+    public static List<List<Integer>> task7_getMergedRanges(int[][] ranges) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        List<Integer> arr_tmp = new ArrayList<>();
+
+        for (int[] range : ranges) {
+            for (int j = range[0]; j <= range[1]; j++) {
+                arr_tmp.add(j);
+            }
+        }
+
+        Collections.sort(arr_tmp);
+
+        int prev = arr_tmp.get(0);
+        int delta;
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < arr_tmp.size(); i++) {
+            delta = arr_tmp.get(i) - prev;
+            if (i == 0 || delta > 1) {
+                if (delta > 1) {
+                    list = new ArrayList<>();
+                }
+                list.add(arr_tmp.get(i));
+                list.add(arr_tmp.get(i));
+                result.add(list);
+            }
+            if (i > 0 && delta == 1) {
+                list.set(1, arr_tmp.get(i));
+            }
+            prev = arr_tmp.get(i);
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
 //        int[] arr1 = new int[]{1, 2, 3, 2, 0};
 //        int[] arr2 = new int[]{5, 1, 2, 7, 3, 2};
@@ -299,6 +339,8 @@ public class YandexApp {
 //                {2, 3},
 //        }));
 
-        System.out.println(task6_getStringGroups(new String[]{"eat", "eat", "tea", "tan", "ate", "nat", "bat"}));
+        //System.out.println(task6_getStringGroups(new String[]{"eat", "eat", "tea", "tan", "ate", "nat", "bat"}));
+
+        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
     }
 }
