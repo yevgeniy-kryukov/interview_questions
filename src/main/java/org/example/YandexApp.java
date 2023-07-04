@@ -304,6 +304,89 @@ public class YandexApp {
         return result;
     }
 
+    private static int[] getRange(List<Integer> range, int targetNum) {
+        int[] result = new int[2];
+        for (int i = 0; i < range.size() - 1; i++) {
+            if ((range.get(i) + range.get(i + 1)) == targetNum) {
+                result[0] = range.get(i);
+                result[1] = range.get(i + 1);
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Дан список интов и число-цель. Нужно найти такой range, чтобы сумма его элементов давала число-цель.
+     * elements = [1, -3, 4, 5]
+     * target = 9
+     * result = range(2, 4) # because elements[2] + elements[3] == target
+     */
+    public static int[] task10_getRange(List<List<Integer>> ranges, int targetNum) {
+        int[] result = new int[2];
+        for (List<Integer> range : ranges) {
+            if (range.size() < 2) {
+                continue;
+            }
+            result = getRange(range, targetNum);
+            if (result[0] > 0 && result[1] > 0) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Дан список интов и число-цель. Нужно найти такой range, чтобы сумма его элементов давала число-цель.
+     * elements = [1, -3, 4, 5]
+     * target = 9
+     * result = range(2, 4) # because elements[2] + elements[3] == target
+     */
+    public static int[] task10_getRange_Threads(List<List<Integer>> ranges, int targetNum, int countThreads) {
+        int[] result = new int[2];
+        int i = 0;
+
+        Iterator<List<Integer>> rangesIts = ranges.iterator();
+
+        List<Integer> range;
+        List<Thread> threads = new ArrayList<>();
+        for (int j = 0; j < Math.ceil((double) ranges.size() / countThreads); j++) {
+
+            for (int k = 0; k < countThreads; k++) {
+                if (rangesIts.hasNext()) {
+                    range = rangesIts.next();
+
+                    if (range.size() < 2) {
+                        continue;
+                    }
+
+                    i++;
+
+                    Thread t = new Thread(new RangeThread(range, targetNum), "thread" + i);
+                    t.start();
+                    threads.add(t);
+                }
+            }
+
+            for (Thread thread : threads) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    System.out.printf("%s has been interrupted", thread.getName());
+                }
+            }
+            threads.clear();
+            System.out.println(Thread.currentThread().getName() + " started");
+
+            if (RangeThread.getResult()[0] > 0 && RangeThread.getResult()[1] > 0) {
+                result = RangeThread.getResult();
+                break;
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
 //        int[] arr1 = new int[]{1, 2, 3, 2, 0};
 //        int[] arr2 = new int[]{5, 1, 2, 7, 3, 2};
@@ -341,6 +424,17 @@ public class YandexApp {
 
         //System.out.println(task6_getStringGroups(new String[]{"eat", "eat", "tea", "tan", "ate", "nat", "bat"}));
 
-        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
+        //System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
+
+        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
+        ranges.add(Arrays.asList(4));
+        //ranges.add(Arrays.asList(4, 5));
+        ranges.add(Arrays.asList(1, 2, 4));
+        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
+        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
+        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
+        ranges.add(Arrays.asList(3, 4, 5, 6));
+        ranges.add(Arrays.asList(1, 5, 5, 4));
+        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
     }
 }
