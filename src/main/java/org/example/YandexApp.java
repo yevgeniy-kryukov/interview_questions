@@ -387,6 +387,100 @@ public class YandexApp {
         return result;
     }
 
+    /**
+     * Даны две строки.
+     * Написать функцию, которая вернёт True,
+     * если из первой строки можно получить вторую,
+     * совершив не более 1 изменения (== удаление / замена символа).
+     */
+    public static boolean task9_is_chg_first_str_to_second(String str1, String str2) {
+        int actionsCount = 0;
+        int charsNotFoundCounter = 0;
+
+        System.out.println("str1:" + str1);
+        System.out.println("str2:" + str2);
+
+//        System.out.println(getStringParams(str1));
+//        System.out.println(getStringParams(str2));
+
+        if (!str1.equals(str2)) {
+            if (Math.abs(str1.length() - str2.length()) > 1) {
+                return false;
+            }
+
+            HashMap<Character, List<Integer>> strParam1 = getStringParams(str1);
+            HashMap<Character, List<Integer>> strParam2 = getStringParams(str2);
+
+//            String charsUniques = str1.concat(str2)
+//                    .chars()
+//                    .distinct()
+//                    .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+//                    .toString();
+
+            boolean isFoundInx;
+            for (Map.Entry<Character, List<Integer>> item : strParam2.entrySet()) {
+                List<Integer> list = strParam1.get(item.getKey());
+//                if ((list == null)
+//                        || ((list != null) && (Math.abs(item.getValue().get(0) - strParam1.get(item.getKey()).get(0)) > 1))) {
+                if (list == null) {
+                    actionsCount++;
+                    charsNotFoundCounter++;
+                } else {
+                    for (int i = 1; i < item.getValue().size(); i++) {
+                        isFoundInx = false;
+                        for (int j = 1; j < list.size(); j++) {
+                            if (Objects.equals(item.getValue().get(i), list.get(j))) {
+                                isFoundInx = true;
+                                break;
+                            }
+                        }
+                        if (!isFoundInx) {
+                            actionsCount++;
+                        }
+                    }
+                }
+
+                strParam1.remove(item.getKey());
+            }
+
+            if ((strParam1.size() == 1 && charsNotFoundCounter == 1)) {
+                actionsCount--;
+            }
+
+            actionsCount = actionsCount + strParam1.size();
+
+            if (actionsCount > 1) {
+                System.out.println("actionsCount:" + actionsCount);
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static HashMap<Character, List<Integer>> getStringParams(String str) {
+        HashMap<Character, List<Integer>> result = new HashMap<>();
+        Character chr;
+        List<Integer> val;
+        for (int i = 0; i < str.length(); i++) {
+            chr = str.charAt(i);
+            val = result.get(chr);
+
+            if (val == null) {
+                val = new ArrayList<>();
+                val.add(1);
+            } else {
+                val.set(0, val.get(0) + 1);
+            }
+            val.add(i);
+            result.put(chr, val);
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
 //        int[] arr1 = new int[]{1, 2, 3, 2, 0};
 //        int[] arr2 = new int[]{5, 1, 2, 7, 3, 2};
@@ -426,15 +520,18 @@ public class YandexApp {
 
         //System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
 
-        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
-        ranges.add(Arrays.asList(4));
-        //ranges.add(Arrays.asList(4, 5));
-        ranges.add(Arrays.asList(1, 2, 4));
-        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
-        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
-        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
-        ranges.add(Arrays.asList(3, 4, 5, 6));
-        ranges.add(Arrays.asList(1, 5, 5, 4));
-        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
+//        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
+//        ranges.add(Arrays.asList(4));
+//        //ranges.add(Arrays.asList(4, 5));
+//        ranges.add(Arrays.asList(1, 2, 4));
+//        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
+//        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
+//        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
+//        ranges.add(Arrays.asList(3, 4, 5, 6));
+//        ranges.add(Arrays.asList(1, 5, 5, 4));
+//        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
+
+        System.out.println(task9_is_chg_first_str_to_second("azbc", "azdbc"));
+
     }
 }
