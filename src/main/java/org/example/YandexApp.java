@@ -398,14 +398,14 @@ public class YandexApp {
         System.out.println("str2:" + str2);
 
         if (str1.equals(str2)) {
-            return false;
+            throw new RuntimeException("Error! Strings equals");
         }
 
         int lenStr1 = str1.length();
         int lenStr2 = str2.length();
 
         if (Math.abs(lenStr1 - lenStr2) > 1) {
-            return false;
+            throw new RuntimeException("Error! Strings differents more than one char");
         }
 
         // посимвольное удаление в первой строке
@@ -436,6 +436,9 @@ public class YandexApp {
         if (lenStr1 == lenStr2) {
             for (int i = 0; i < str2.length(); i++) {
                 for (int j = 0; j < str1.length(); j++) {
+                    if (str1.charAt(i) == str2.charAt(j)) {
+                        continue;
+                    }
                     StringBuilder builderStr1 = new StringBuilder(str1);
                     builderStr1.replace(j, j + 1, String.valueOf(str2.charAt(i)));
                     if (builderStr1.toString().equals(str2)) {
@@ -498,7 +501,7 @@ public class YandexApp {
 //        ranges.add(Arrays.asList(1, 5, 5, 4));
 //        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
 
-        System.out.println(task9_is_chg_first_str_to_second("azbczq", "azbcu"));
+        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
 
 
     }
