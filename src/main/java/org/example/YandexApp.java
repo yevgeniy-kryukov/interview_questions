@@ -1,5 +1,6 @@
 package org.example;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public class YandexApp {
@@ -90,6 +91,38 @@ public class YandexApp {
 
         System.out.println(arr3);
         return arr3;
+    }
+
+    /**
+     * Даны два массива: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2]
+     * Надо вернуть [1, 2, 2, 3] (порядок неважен)
+     */
+    public static List<Integer> task1_v3(int[] arr1, int[] arr2) {
+        List<Integer> resultList = new ArrayList<>();
+        int elCount1;
+        int elCount2;
+        for (int el : arr1) {
+            if (resultList.contains(el)) {
+                continue;
+            }
+            elCount1 = 0;
+            elCount2 = 0;
+            for (int j = 0; j < Math.max(arr1.length, arr2.length); j++) {
+                if ((j < arr1.length) && (arr1[j] == el)) {
+                    elCount1++;
+                }
+
+                if ((j < arr2.length) && (arr2[j] == el)) {
+                    elCount2++;
+                }
+            }
+            if (elCount1 == elCount2) {
+                for (int n = 0; n < elCount1; n++) {
+                    resultList.add(el);
+                }
+            }
+        }
+        return resultList;
     }
 
     private static int[] fillArrRand(int[] arr) {
@@ -452,10 +485,10 @@ public class YandexApp {
     }
 
     public static void main(String[] args) {
-//        int[] arr1 = new int[]{1, 2, 3, 2, 0};
-//        int[] arr2 = new int[]{5, 1, 2, 7, 3, 2};
-        int[] arr1 = fillArrRand(new int[100]);
-        int[] arr2 = fillArrRand(new int[100]);
+        int[] arr1 = new int[]{1, 2, 3, 2, 0};
+        int[] arr2 = new int[]{5, 0, 1, 2, 7, 3, 2};
+//        int[] arr1 = fillArrRand(new int[100]);
+//        int[] arr2 = fillArrRand(new int[100]);
 
 //        System.out.println(Arrays.toString(arr1));
 //        System.out.println(Arrays.toString(arr2));
@@ -467,6 +500,10 @@ public class YandexApp {
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
 //        task1_v2(arr1, arr2);
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
+
+        System.out.println(new Timestamp(System.currentTimeMillis()));
+        System.out.println(task1_v3(arr1, arr2));
+        System.out.println(new Timestamp(System.currentTimeMillis()));
 
 //        String str = "AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB";
 //        //String str = "AABB";
@@ -501,7 +538,7 @@ public class YandexApp {
 //        ranges.add(Arrays.asList(1, 5, 5, 4));
 //        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
 
-        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
+//        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
 
 
     }
