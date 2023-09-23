@@ -144,23 +144,65 @@ public class YandexApp {
      * Пояснения: Если символ встречается 1 раз, он остается без изменений; Если символ повторяется более 1 раза, к нему добавляется количество повторений.
      */
     public static String task2_RLE(String str) {
-        ConditionAppend conditionAppend = (sb, count, ch) -> count > 1 ? sb.append(ch).append(count) : sb;
+        //AABB
+        ConditionAppend conditionAppend = (sb, count, ch) -> {
+            sb.append(ch);
+            if (count > 1) {
+                sb.append(count);
+            }
+            return sb;
+        };
         StringBuilder result = new StringBuilder();
-        if (str.length() == 0) {
+        if (str.isEmpty()) {
             throw new RuntimeException("Error! Input string is empty");
         }
-        char prev = str.charAt(0);
+        char currChar = str.charAt(0);
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (prev != str.charAt(i)) {
-                result = conditionAppend.append(result, count, prev);
-                prev = str.charAt(i);
+            if (currChar != str.charAt(i)) {
+                result = conditionAppend.append(result, count, currChar);
+                currChar = str.charAt(i);
                 count = 0;
             }
             count++;
             if ((i + 1) == str.length()) {
-                result = conditionAppend.append(result, count, prev);
+                result = conditionAppend.append(result, count, currChar);
             }
+        }
+        return result.toString();
+    }
+
+    /**
+     * Дана строка (возможно, пустая), состоящая из букв A-Z: AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB
+     * Нужно написать функцию RLE, которая на выходе даст строку вида: A4B3C2XYZD4E3F3A6B28
+     * И сгенерирует ошибку, если на вход пришла невалидная строка.
+     * Пояснения: Если символ встречается 1 раз, он остается без изменений; Если символ повторяется более 1 раза, к нему добавляется количество повторений.
+     */
+    public static String task2_RLE_v2(String str) {
+        final char specChar = ' ';
+        StringBuilder result = new StringBuilder();
+        if (str.isEmpty()) {
+            throw new RuntimeException("Error! Input string is empty");
+        }
+        if (str.contains(String.valueOf(specChar))) {
+            throw new RuntimeException("Error! String contains spec char");
+        }
+        str = str + specChar;
+        char currChar = str.charAt(0);
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (currChar != str.charAt(i)) {
+                result.append(currChar);
+                if (count > 1) {
+                    result.append(count);
+                }
+                currChar = str.charAt(i);
+                if (currChar == specChar) {
+                    break;
+                }
+                count = 0;
+            }
+            count++;
         }
         return result.toString();
     }
@@ -501,13 +543,14 @@ public class YandexApp {
 //        task1_v2(arr1, arr2);
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
 
-        System.out.println(new Timestamp(System.currentTimeMillis()));
-        System.out.println(task1_v3(arr1, arr2));
-        System.out.println(new Timestamp(System.currentTimeMillis()));
+//        System.out.println(new Timestamp(System.currentTimeMillis()));
+//        System.out.println(task1_v3(arr1, arr2));
+//        System.out.println(new Timestamp(System.currentTimeMillis()));
 
-//        String str = "AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB";
-//        //String str = "AABB";
-//        System.out.println(task2_RLE(str));
+        //String str = "AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB";
+        String str = "AABBC";
+        System.out.println(task2_RLE(str));
+        System.out.println(task2_RLE_v2(str));
 
 //        System.out.println(getCountRepeatChars(str));
 
