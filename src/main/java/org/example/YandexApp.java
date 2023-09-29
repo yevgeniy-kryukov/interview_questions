@@ -307,9 +307,9 @@ public class YandexApp {
      */
     public static Optional<Map.Entry<Integer, Integer>> task5_getMaxGuests(int[][] arrDts) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-        for (int[] el : arrDts) {
-            for (int x = el[0]; x < el[1]; x++) {
-                hashMap.put(x, hashMap.get(x) != null ? hashMap.get(x) + 1 : 1);
+        for (int[] intervalDays : arrDts) {
+            for (int day = intervalDays[0]; day < intervalDays[1]; day++) {
+                hashMap.put(day, hashMap.get(day) != null ? hashMap.get(day) + 1 : 1);
             }
         }
         return hashMap.entrySet().stream().max(Comparator.comparingInt(Map.Entry::getValue));
@@ -350,6 +350,9 @@ public class YandexApp {
         List<Integer> arr_tmp = new ArrayList<>();
 
         for (int[] range : ranges) {
+            if ((range.length != 2) || (range[0] > range[1])) {
+                throw new RuntimeException("One of the segment is not specified correctly!");
+            }
             for (int j = range[0]; j <= range[1]; j++) {
                 arr_tmp.add(j);
             }
@@ -359,18 +362,16 @@ public class YandexApp {
 
         int prev = arr_tmp.get(0);
         int delta;
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < arr_tmp.size(); i++) {
+        List<Integer> list = new ArrayList<>(Arrays.asList(prev, prev));
+        result.add(list);
+        for (int i = 1; i < arr_tmp.size(); i++) {
             delta = arr_tmp.get(i) - prev;
-            if (i == 0 || delta > 1) {
-                if (delta > 1) {
-                    list = new ArrayList<>();
-                }
+            if (delta > 1) {
+                list = new ArrayList<>();
                 list.add(arr_tmp.get(i));
                 list.add(arr_tmp.get(i));
                 result.add(list);
-            }
-            if (i > 0 && delta == 1) {
+            } else if (delta == 1) {
                 list.set(1, arr_tmp.get(i));
             }
             prev = arr_tmp.get(i);
@@ -548,14 +549,14 @@ public class YandexApp {
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
 
         //String str = "AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB";
-        String str = "AABBC";
-        System.out.println(task2_RLE(str));
-        System.out.println(task2_RLE_v2(str));
+//        String str = "AABBC";
+//        System.out.println(task2_RLE(str));
+//        System.out.println(task2_RLE_v2(str));
 
 //        System.out.println(getCountRepeatChars(str));
 
 //        System.out.println(task3(new int[]{1, 4, 2, 3, 5, 6, 8, 9, 10, 12, 15}));
-        //System.out.println(task3(new int[]{1}));
+//        System.out.println(task3(new int[]{1}));
 
 //        System.out.println(task4(new int[]{0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1}));
 
@@ -568,7 +569,7 @@ public class YandexApp {
 
         //System.out.println(task6_getStringGroups(new String[]{"eat", "eat", "tea", "tan", "ate", "nat", "bat"}));
 
-        //System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
+        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
 
 //        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
 //        ranges.add(Arrays.asList(4));
