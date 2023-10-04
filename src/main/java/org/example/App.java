@@ -113,7 +113,7 @@ public class App {
         q1_setsBigDecimal();
         System.out.println("_______ExceptionsSample:");
         ExceptionsSample exceptionsSample = new ExceptionsSample();
-        System.out.println(exceptionsSample.calc(2, 2));
+        System.out.println(exceptionsSample.run());
         System.out.println("_______q2_sortByStrLen:");
         q2_sortByStrLen();
         System.out.println("_______q3_sortByStrAlfReverse:");
