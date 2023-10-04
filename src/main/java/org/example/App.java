@@ -16,18 +16,21 @@ public class App {
 
         set.add(new BigDecimal("1.0"));
         set.add(new BigDecimal("1.00"));
+        set.add(new BigDecimal("1.00"));
         set.add(new BigDecimal("1.000"));
 
         treeSet.add(new BigDecimal("1.0"));
+        treeSet.add(new BigDecimal("1.0"));
         treeSet.add(new BigDecimal("1.00"));
+        treeSet.add(new BigDecimal("1.000"));
 
         System.out.println(set.size());
         System.out.println(treeSet.size());
     }
 
     public static void q2_sortByStrLen() {
-        List<String> list = new ArrayList<String>(Arrays.asList("qwerty", "dfasdfa", "dsa", "f", "asdfsdfa", "retwer"));
-        List<String> list2 = list.stream()
+        List<String> list = new ArrayList<String>(Arrays.asList("qwerty", "dfasdfa", "dsa", "f", "asdfsdfa", "retwer")); // new modified list
+        List<String> list2 = list.stream() // new modified list
                 .sorted(new Comparator<String>() {
                     @Override
                     public int compare(String o1, String o2) {
@@ -40,8 +43,8 @@ public class App {
     }
 
     public static void q3_sortByStrAlfReverse() {
-        List<String> list = Arrays.asList("qwerty", "dfasdfa", "dsa", "f", "asdfsdfa", "retwer");
-        List<String> list2 = list.stream()
+        List<String> list = Arrays.asList("qwerty", "dfasdfa", "dsa", "f", "asdfsdfa", "retwer"); // new unmodified list
+        List<String> list2 = list.stream() // new modified list
                 .sorted(Comparator.reverseOrder())
                 .collect(ArrayList<String>::new,
                         (listNew, item) -> listNew.add(item + 1),
@@ -105,6 +108,16 @@ public class App {
         for (Integer item : integerHashSet) {
             System.out.print(item + ", ");
         }
+        System.out.println(" ");
+    }
+
+    public static void q7_sortStrByCountChr( List<String> stringList, char ch) {
+        List<String> resultList = stringList.stream().sorted(
+                (o1, o2) -> (int) ((o2.chars().filter(el -> el == ch).count() - o1.chars().filter(el -> el == ch).count()))
+        ).collect(Collectors.toList());
+
+        System.out.println(resultList);
+
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -128,5 +141,7 @@ public class App {
         q5_getMinNumByStream();
         System.out.println("_______q6_arrayListVsHashSet:");
         q6_arrayListVsHashSet();
+        System.out.println("_______q7_sortStrByCountChr:");
+        q7_sortStrByCountChr( Arrays.asList("fdgsdfg", "retretw", "rtqwwsads", "vxcbxc", "sfdwww"), 'w');
     }
 }

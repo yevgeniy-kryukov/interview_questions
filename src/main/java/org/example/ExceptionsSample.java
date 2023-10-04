@@ -11,7 +11,6 @@ public class ExceptionsSample {
     class Child extends Parent  {
         @Override
         public void f() throws FileNotFoundException {
-            throw new RuntimeException("Child RuntimeException");
         }
     }
 
