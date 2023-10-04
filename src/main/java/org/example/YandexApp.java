@@ -569,18 +569,19 @@ public class YandexApp {
 
         //System.out.println(task6_getStringGroups(new String[]{"eat", "eat", "tea", "tan", "ate", "nat", "bat"}));
 
-        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
+//        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
 
-//        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
-//        ranges.add(Arrays.asList(4));
-//        //ranges.add(Arrays.asList(4, 5));
-//        ranges.add(Arrays.asList(1, 2, 4));
-//        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
-//        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
-//        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
-//        ranges.add(Arrays.asList(3, 4, 5, 6));
-//        ranges.add(Arrays.asList(1, 5, 5, 4));
-//        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
+        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
+        ranges.add(Arrays.asList(4));
+        //ranges.add(Arrays.asList(4, 5));
+        ranges.add(Arrays.asList(1, 2, 4));
+        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
+        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
+        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
+        ranges.add(Arrays.asList(3, 4, 5, 6));
+        ranges.add(Arrays.asList(1, 5, 5, 4));
+        //System.out.println(Arrays.toString(task10_getRange(ranges, 9)));
+        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
 
 //        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
 
