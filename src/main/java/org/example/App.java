@@ -111,7 +111,7 @@ public class App {
         System.out.println(" ");
     }
 
-    public static void q7_sortStrByCountChr( List<String> stringList, char ch) {
+    public static void q7_sortStrByCountChr(List<String> stringList, char ch) {
         List<String> resultList = stringList.stream().sorted(
                 (o1, o2) -> (int) ((o2.chars().filter(el -> el == ch).count() - o1.chars().filter(el -> el == ch).count()))
         ).collect(Collectors.toList());
@@ -142,6 +142,20 @@ public class App {
         System.out.println("_______q6_arrayListVsHashSet:");
         q6_arrayListVsHashSet();
         System.out.println("_______q7_sortStrByCountChr:");
-        q7_sortStrByCountChr( Arrays.asList("fdgsdfg", "retretw", "rtqwwsads", "vxcbxc", "sfdwww"), 'w');
+        q7_sortStrByCountChr(Arrays.asList("fdgsdfg", "retretw", "rtqwwsads", "vxcbxc", "sfdwww"), 'w');
+
+        //String pool example
+        System.out.println("String pool example");
+        String cat = new String("cat"); // Create object in heap space
+        String cat1 = cat.intern();                    // Create object in pool string
+        String cat2 = "cat";                   // get or create object from pool string
+        String cat3 = "cat";                   // get or create object from pool string
+        System.out.println(cat == cat1);
+        System.out.println(cat2 == cat1);
+        System.out.println(cat3 == cat2);
+
+        String cat0 = new String("cat"); // Create object in heap space
+        System.out.println(cat0 == cat1);
+
     }
 }

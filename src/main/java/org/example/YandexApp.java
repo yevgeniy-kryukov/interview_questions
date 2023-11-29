@@ -4,26 +4,29 @@ import java.sql.Timestamp;
 import java.util.*;
 
 public class YandexApp {
+    private interface ArrayElemUtils {
+        Map<Integer, Integer> getGroupedArrElems(int[] arr);
+    }
+
     /**
      * Даны два массива: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2]
      * Надо вернуть [1, 2, 2, 3] (порядок неважен)
      */
     public static List<Integer> task1(int[] a1, int[] a2) {
-        List<Integer> arr3 = new ArrayList<>();
+        List<Integer> result = new ArrayList<>();
 
-        HashMap<Integer, Integer> hashMap1 = Arrays.stream(a1).collect(HashMap::new,
-                (map, item) -> {
-                    Integer val = map.get(item);
-                    map.put(item, val == null ? 1 : val + 1);
-                },
-                (map1, map2) -> map1.putAll(map2));
+        ArrayElemUtils arrayElemUtils = arr -> {
+            return Arrays.stream(arr).collect(HashMap::new,
+                    (map, item) -> {
+                        Integer val = map.get(item);
+                        map.put(item, val == null ? 1 : val + 1);
+                    },
+                    (map1, map2) -> map1.putAll(map2));
+        };
 
-        HashMap<Integer, Integer> hashMap2 = Arrays.stream(a2).collect(HashMap::new,
-                (map, item) -> {
-                    Integer val = map.get(item);
-                    map.put(item, val == null ? 1 : val + 1);
-                },
-                (map1, map2) -> map1.putAll(map2));
+        Map<Integer, Integer> hashMap1 = arrayElemUtils.getGroupedArrElems(a1);
+
+        Map<Integer, Integer> hashMap2 = arrayElemUtils.getGroupedArrElems(a2);
 
         for (Integer key : hashMap1.keySet()) {
             Integer val2 = hashMap2.get(key);
@@ -31,36 +34,28 @@ public class YandexApp {
                 Integer val1 = hashMap1.get(key);
                 if (val2.equals(val1)) {
                     for (int i = 0; i < val1; i++) {
-                        arr3.add(key);
+                        result.add(key);
                     }
                 }
             }
         }
 
-        System.out.println(arr3);
-        return arr3;
+        System.out.println(result);
+        return result;
     }
 
     private static Integer[][] getGroupingElems(int[] arr1) {
         Integer[][] tmp_arr1 = new Integer[2][arr1.length];
-        boolean found;
-        int insIndex = 0;
         for (int k : arr1) {
-            found = false;
             for (int j = 0; j < tmp_arr1[0].length; j++) {
                 if (tmp_arr1[0][j] == null) {
-                    break;
+                    tmp_arr1[0][j] = k;
+                    tmp_arr1[1][j] = 0;
                 }
                 if (tmp_arr1[0][j] == k) {
                     tmp_arr1[1][j] = tmp_arr1[1][j] + 1;
-                    found = true;
                     break;
                 }
-            }
-            if (!found) {
-                tmp_arr1[0][insIndex] = k;
-                tmp_arr1[1][insIndex] = 1;
-                insIndex++;
             }
         }
         return tmp_arr1;
@@ -71,26 +66,29 @@ public class YandexApp {
      * Надо вернуть [1, 2, 2, 3] (порядок неважен)
      */
     public static List<Integer> task1_v2(int[] arr1, int[] arr2) {
-        List<Integer> arr3 = new ArrayList<>();
+        List<Integer> result = new ArrayList<>();
 
         Integer[][] tmp_arr1 = getGroupingElems(arr1);
         Integer[][] tmp_arr2 = getGroupingElems(arr2);
 
         for (int i = 0; i < tmp_arr1[0].length; i++) {
+            if (tmp_arr1[0][i] == null) {
+                break;
+            }
             for (int j = 0; j < tmp_arr2[0].length; j++) {
-                if (tmp_arr1[0][i] == null || tmp_arr2[0][j] == null) {
-                    continue;
+                if (tmp_arr2[0][j] == null) {
+                    break;
                 }
                 if ((tmp_arr1[0][i].equals(tmp_arr2[0][j])) && (tmp_arr1[1][i].equals(tmp_arr2[1][j]))) {
                     for (int z = 0; z < tmp_arr2[1][j]; z++) {
-                        arr3.add(tmp_arr2[0][j]);
+                        result.add(tmp_arr2[0][j]);
                     }
                 }
             }
         }
 
-        System.out.println(arr3);
-        return arr3;
+        System.out.println(result);
+        return result;
     }
 
     /**
