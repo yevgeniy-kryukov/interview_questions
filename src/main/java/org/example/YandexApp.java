@@ -2,6 +2,8 @@ package org.example;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class YandexApp {
     private interface ArrayElemUtils {
@@ -203,6 +205,20 @@ public class YandexApp {
             count++;
         }
         return result.toString();
+    }
+
+    public static String task2_RLE_v3(String str) {
+        List<String> characterList = str.chars().mapToObj(el -> String.valueOf((char) el)).collect(Collectors.toList());
+        Map<String, Long> mapCountEl = characterList.stream().collect(Collectors.groupingBy(el -> el, Collectors.counting()));
+        return mapCountEl.entrySet().stream().collect(StringBuilder::new,
+                        (sb, el) -> {
+                            sb.append(el.getKey());
+                            if (el.getValue() > 1) {
+                                sb.append(el.getValue());
+                            }
+                        },
+                        (sb1, sb2) -> sb1.append(sb2.toString()))
+                .toString();
     }
 
     public static String getCountRepeatChars(String str) {
@@ -569,20 +585,21 @@ public class YandexApp {
 
 //        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}}));
 
-        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
-        ranges.add(Arrays.asList(4));
-        //ranges.add(Arrays.asList(4, 5));
-        ranges.add(Arrays.asList(1, 2, 4));
-        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
-        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
-        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
-        ranges.add(Arrays.asList(3, 4, 5, 6));
-        ranges.add(Arrays.asList(1, 5, 5, 4));
-        //System.out.println(Arrays.toString(task10_getRange(ranges, 9)));
-        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
+//        List<List<Integer>> ranges = Collections.synchronizedList(new ArrayList<>());
+//        ranges.add(Arrays.asList(4));
+//        //ranges.add(Arrays.asList(4, 5));
+//        ranges.add(Arrays.asList(1, 2, 4));
+//        ranges.add(Arrays.asList(1, 2, 2, 5, 7));
+//        ranges.add(Arrays.asList(1, 4, 6, 8, 7));
+//        ranges.add(Arrays.asList(1, 1, 3, 2, 4));
+//        ranges.add(Arrays.asList(3, 4, 5, 6));
+//        ranges.add(Arrays.asList(1, 5, 5, 4));
+//        //System.out.println(Arrays.toString(task10_getRange(ranges, 9)));
+//        System.out.println(Arrays.toString(task10_getRange_Threads(ranges, 9, 2)));
 
 //        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
 
+        System.out.println(task2_RLE_v3("abcda"));
 
     }
 }
