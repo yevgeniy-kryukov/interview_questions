@@ -208,7 +208,6 @@ public class YandexApp {
     }
 
     /**
-     *
      * Дана строка acbda.
      * Написать функцию, которая вернет a2bcd.
      */
@@ -359,27 +358,35 @@ public class YandexApp {
                 throw new RuntimeException("One of the segment is not specified correctly!");
             }
             for (int j = range[0]; j <= range[1]; j++) {
-                arr_tmp.add(j);
+                if (!arr_tmp.contains(j)) {
+                    arr_tmp.add(j);
+                }
             }
         }
 
         Collections.sort(arr_tmp);
 
-        int prev = arr_tmp.get(0);
-        int delta;
-        List<Integer> list = new ArrayList<>(Arrays.asList(prev, prev));
-        result.add(list);
-        for (int i = 1; i < arr_tmp.size(); i++) {
-            delta = arr_tmp.get(i) - prev;
+        int prevVal = 0;
+        int delta = 0;
+        int currVal = 0;
+        List<Integer> list = null;
+
+        for (int i = 0; i < arr_tmp.size(); i++) {
+            currVal = arr_tmp.get(i);
+            if (i == 0) {
+                delta = 2; // создаем новый ArrayList
+            } else {
+                delta = currVal - prevVal;
+            }
             if (delta > 1) {
                 list = new ArrayList<>();
-                list.add(arr_tmp.get(i));
-                list.add(arr_tmp.get(i));
+                list.add(currVal);
+                list.add(currVal);
                 result.add(list);
             } else if (delta == 1) {
-                list.set(1, arr_tmp.get(i));
+                list.set(1, currVal);
             }
-            prev = arr_tmp.get(i);
+            prevVal = currVal;
         }
 
         return result;
@@ -590,7 +597,10 @@ public class YandexApp {
 
 //        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
 
-        System.out.println(getStringWithGroupedChars("acbda"));
+        //System.out.println(getStringWithGroupedChars("acbda"));
+        // System.out.println(task3(new int[]{1,4}));
+        //System.out.println(task4(new int[]{0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1}));
+        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}})); //[[0, 6], [8, 9], [100, 200]]
 
     }
 }
