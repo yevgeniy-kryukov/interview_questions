@@ -207,7 +207,12 @@ public class YandexApp {
         return result.toString();
     }
 
-    public static String task2_RLE_v3(String str) {
+    /**
+     *
+     * Дана строка acbda.
+     * Написать функцию, которая вернет a2bcd.
+     */
+    public static String getStringWithGroupedChars(String str) {
         List<String> characterList = str.chars().mapToObj(el -> String.valueOf((char) el)).collect(Collectors.toList());
         Map<String, Long> mapCountEl = characterList.stream().collect(Collectors.groupingBy(el -> el, Collectors.counting()));
         return mapCountEl.entrySet().stream().collect(StringBuilder::new,
@@ -219,20 +224,6 @@ public class YandexApp {
                         },
                         (sb1, sb2) -> sb1.append(sb2.toString()))
                 .toString();
-    }
-
-    public static String getCountRepeatChars(String str) {
-        Map<String, Integer> resHashMap = new HashMap<>();
-        String chr = "";
-        for (int i = 0; i < str.length(); i++) {
-            chr = String.valueOf(str.charAt(i));
-            resHashMap.put(chr, resHashMap.get(chr) != null ? resHashMap.get(chr) + 1 : 1);
-        }
-        return resHashMap.entrySet().stream()
-                .filter(e -> e.getValue() > 1)
-                .collect(StringBuilder::new,
-                        (sb, e) -> sb.append(e.getKey()).append(e.getValue()),
-                        (sb1, sb2) -> sb1.append(sb2.toString())).toString();
     }
 
     interface Appender {
@@ -567,7 +558,7 @@ public class YandexApp {
 //        System.out.println(task2_RLE(str));
 //        System.out.println(task2_RLE_v2(str));
 
-//        System.out.println(getCountRepeatChars(str));
+//        System.out.println(getStringWithGroupedChars(str));
 
 //        System.out.println(task3(new int[]{1, 4, 2, 3, 5, 6, 8, 9, 10, 12, 15}));
 //        System.out.println(task3(new int[]{1}));
@@ -599,7 +590,7 @@ public class YandexApp {
 
 //        System.out.println(task9_is_chg_first_str_to_second("azbci", "azbcu"));
 
-        System.out.println(task2_RLE_v3("abcda"));
+        System.out.println(getStringWithGroupedChars("acbda"));
 
     }
 }
