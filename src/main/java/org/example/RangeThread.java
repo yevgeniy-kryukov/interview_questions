@@ -7,7 +7,7 @@ public class RangeThread implements Runnable {
 
     private final Integer targetNum;
 
-    final private static int[] result = new int[2];
+    private final static int[] result = new int[2];
 
     public RangeThread(List<Integer> range, Integer targetNum) {
         this.range = range;
@@ -29,8 +29,8 @@ public class RangeThread implements Runnable {
         for (int i = 0; i < range.size() - 1; i++) {
             if ((range.get(i) + range.get(i + 1)) == targetNum) {
                 synchronized (result) {
-                    result[0] = range.get(i);
-                    result[1] = range.get(i + 1);
+                    result[0] = i;
+                    result[1] = i + 1;
                     break;
                 }
             }

@@ -1,39 +1,41 @@
 package org.example;
 
-import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class YandexApp {
     private interface ArrayElemUtils {
-        Map<Integer, Integer> getGroupedArrElems(int[] arr);
+        Map<Integer, Long> getGroupedArrElems(Integer[] arr);
     }
 
     /**
      * Даны два массива: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2]
      * Надо вернуть [1, 2, 2, 3] (порядок неважен)
      */
-    public static List<Integer> task1(int[] a1, int[] a2) {
+    public static List<Integer> task1(Integer[] a1, Integer[] a2) {
         List<Integer> result = new ArrayList<>();
 
+//        ArrayElemUtils arrayElemUtils = arr -> {
+//            return Arrays.stream(arr).collect(HashMap::new,
+//                    (map, item) -> {
+//                        Integer val = map.get(item);
+//                        map.put(item, val == null ? 1 : val + 1);
+//                    },
+//                    (map1, map2) -> map1.putAll(map2));
+//        };
+
         ArrayElemUtils arrayElemUtils = arr -> {
-            return Arrays.stream(arr).collect(HashMap::new,
-                    (map, item) -> {
-                        Integer val = map.get(item);
-                        map.put(item, val == null ? 1 : val + 1);
-                    },
-                    (map1, map2) -> map1.putAll(map2));
+            return Arrays.stream(arr).collect(Collectors.groupingBy(el -> el, Collectors.counting()));
         };
 
-        Map<Integer, Integer> hashMap1 = arrayElemUtils.getGroupedArrElems(a1);
+        Map<Integer, Long> hashMap1 = arrayElemUtils.getGroupedArrElems(a1);
 
-        Map<Integer, Integer> hashMap2 = arrayElemUtils.getGroupedArrElems(a2);
+        Map<Integer, Long> hashMap2 = arrayElemUtils.getGroupedArrElems(a2);
 
         for (Integer key : hashMap1.keySet()) {
-            Integer val2 = hashMap2.get(key);
+            Long val2 = hashMap2.get(key);
             if (val2 != null) {
-                Integer val1 = hashMap1.get(key);
+                Long val1 = hashMap1.get(key);
                 if (val2.equals(val1)) {
                     for (int i = 0; i < val1; i++) {
                         result.add(key);
@@ -42,11 +44,10 @@ public class YandexApp {
             }
         }
 
-        System.out.println(result);
         return result;
     }
 
-    private static Integer[][] getGroupingElems(int[] arr1) {
+    private static Integer[][] getGroupingElems(Integer[] arr1) {
         Integer[][] tmp_arr1 = new Integer[2][arr1.length];
         for (int k : arr1) {
             for (int j = 0; j < tmp_arr1[0].length; j++) {
@@ -67,7 +68,7 @@ public class YandexApp {
      * Даны два массива: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2]
      * Надо вернуть [1, 2, 2, 3] (порядок неважен)
      */
-    public static List<Integer> task1_v2(int[] arr1, int[] arr2) {
+    public static List<Integer> task1_v2(Integer[] arr1, Integer[] arr2) {
         List<Integer> result = new ArrayList<>();
 
         Integer[][] tmp_arr1 = getGroupingElems(arr1);
@@ -89,7 +90,6 @@ public class YandexApp {
             }
         }
 
-        System.out.println(result);
         return result;
     }
 
@@ -97,7 +97,7 @@ public class YandexApp {
      * Даны два массива: [1, 2, 3, 2, 0] и [5, 1, 2, 7, 3, 2]
      * Надо вернуть [1, 2, 2, 3] (порядок неважен)
      */
-    public static List<Integer> task1_v3(int[] arr1, int[] arr2) {
+    public static List<Integer> task1_v3(Integer[] arr1, Integer[] arr2) {
         List<Integer> resultList = new ArrayList<>();
         int elCount1;
         int elCount2;
@@ -179,14 +179,14 @@ public class YandexApp {
      * Пояснения: Если символ встречается 1 раз, он остается без изменений; Если символ повторяется более 1 раза, к нему добавляется количество повторений.
      */
     public static String task2_RLE_v2(String str) {
-        final char specChar = ' ';
-        StringBuilder result = new StringBuilder();
         if (str.isEmpty()) {
             throw new RuntimeException("Error! Input string is empty");
         }
+        final char specChar = ' ';
         if (str.contains(String.valueOf(specChar))) {
             throw new RuntimeException("Error! String contains spec char");
         }
+        StringBuilder result = new StringBuilder();
         str = str + specChar;
         char currChar = str.charAt(0);
         int count = 0;
@@ -280,7 +280,7 @@ public class YandexApp {
         int count = 0;
         for (int j = 0; j < arr.length; j++) {
             for (int i = 0; i < arr.length; i++) {
-                if (i == j) {
+                if (i == j && arr[j] == 0) {
                     continue;
                 }
                 if (arr[i] == 1) {
@@ -396,8 +396,8 @@ public class YandexApp {
         int[] result = new int[2];
         for (int i = 0; i < range.size() - 1; i++) {
             if ((range.get(i) + range.get(i + 1)) == targetNum) {
-                result[0] = range.get(i);
-                result[1] = range.get(i + 1);
+                result[0] = i;
+                result[1] = i + 1;
                 break;
             }
         }
@@ -481,7 +481,7 @@ public class YandexApp {
      * если из первой строки можно получить вторую,
      * совершив не более 1 изменения (== удаление / замена символа).
      */
-    public static boolean task9_is_chg_first_str_to_second(String str1, String str2) {
+    public static boolean task9_is_chg_first_str_to_second(final String str1, final String str2) {
         System.out.println("str1:" + str1);
         System.out.println("str2:" + str2);
 
@@ -489,8 +489,8 @@ public class YandexApp {
             throw new RuntimeException("Error! Strings equals");
         }
 
-        int lenStr1 = str1.length();
-        int lenStr2 = str2.length();
+        final int lenStr1 = str1.length();
+        final int lenStr2 = str2.length();
 
         if (Math.abs(lenStr1 - lenStr2) > 1) {
             throw new RuntimeException("Error! Strings differents more than one char");
@@ -540,8 +540,8 @@ public class YandexApp {
     }
 
     public static void main(String[] args) {
-        int[] arr1 = new int[]{1, 2, 3, 2, 0};
-        int[] arr2 = new int[]{5, 0, 1, 2, 7, 3, 2};
+        Integer[] arr1 = new Integer[]{1, 2, 3, 2, 0};
+        Integer[] arr2 = new Integer[]{5, 0, 1, 2, 7, 3, 2};
 //        int[] arr1 = fillArrRand(new int[100]);
 //        int[] arr2 = fillArrRand(new int[100]);
 
@@ -549,15 +549,15 @@ public class YandexApp {
 //        System.out.println(Arrays.toString(arr2));
 
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
-//        task1(arr1, arr2);
+        System.out.println(task1(arr1, arr2));
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
 
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
-//        task1_v2(arr1, arr2);
+        System.out.println(task1_v2(arr1, arr2));
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
 
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
-//        System.out.println(task1_v3(arr1, arr2));
+        System.out.println(task1_v3(arr1, arr2));
 //        System.out.println(new Timestamp(System.currentTimeMillis()));
 
         //String str = "AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB";
@@ -600,7 +600,24 @@ public class YandexApp {
         //System.out.println(getStringWithGroupedChars("acbda"));
         // System.out.println(task3(new int[]{1,4}));
         //System.out.println(task4(new int[]{0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1}));
-        System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}})); //[[0, 6], [8, 9], [100, 200]]
+        //System.out.println(task7_getMergedRanges(new int[][]{{1, 3}, {0, 2}, {4, 6}, {8, 9}, {100, 200}})); //[[0, 6], [8, 9], [100, 200]]
+
+//        Integer[][] arr0 = new Integer[2][5];
+//        for (int i = 0; i < 5; i++) {
+//            arr0[0][i] = i;
+//            arr0[1][i] = i * 2;
+//        }
+
+//        Integer[][] arr0 = new Integer[][]{{0, 1, 2, 3, 4}, {0, 2, 4, 5, 8}};
+//
+//        for (int i = 0; i < arr0.length; i++) {
+//            for (int j = 0; j < arr0[0].length; j++) {
+//                System.out.print(arr0[i][j]);
+//            }
+//            System.out.println("----");
+//        }
+        //System.out.println(arr0);
+
 
     }
 }
