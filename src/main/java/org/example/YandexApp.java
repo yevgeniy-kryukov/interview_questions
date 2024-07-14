@@ -618,6 +618,6 @@ public class YandexApp {
 //        }
         //System.out.println(arr0);
 
-
+        Singleton singleton = new Singleton().getInstance();
     }
 }
